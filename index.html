@@ -1,1 +1,261 @@
-Hello World!
+
+<!DOCTYPE html>
+<h <meta charset=UTF-8>
+    <title>Simplify Fractional Powers</title>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script>
+        $(document).ready(function() {
+
+            function sendme(e){
+        //var product_code = $('#product_code').val();
+        var product_code = "Gary's fun math worksheet"
+            var product_name = $('#username').val();
+            var price        = $('#correct').text();
+            $.ajax({
+                type : "POST",
+                url  : "http://math.seattleacademy.org/api/ws/index.php/product/save",
+                dataType : "JSON",
+                data : {product_code:product_code , product_name:product_name, price:price},
+                success: function(data){
+                   // $('[name="product_code"]').val("");
+                    //$('[name="product_name"]').val("");
+                   //$('[name="price"]').val("");
+                   // $('#Modal_Add').modal('hide');
+                   // show_product();
+                   console.log('success!!!!')
+                }
+            });
+            return false;
+    }
+    $("#sendme").click(sendme);
+    //shuffleMe();
+    $('input').attr('size', 7);
+
+    var count;
+    var counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+    function timer() {
+        $('.MathJax').attr("tabindex", -1); //Keeps MathJax objects from being tabable
+        count = count - 1;
+
+        if (count <= 0) {
+            clearInterval(counter);
+            $("#timesUp").text("Times up!");
+            return;
+        }
+
+        $("#elapsedtime").html(count);
+    }
+
+    function reset(){
+        $('input').val("");
+        $('input').removeClass("correct");
+        $('input').removeClass("incorrect");
+        count = 300
+        $('#errors').text(0);
+        $('#correct').text(0);
+    }
+
+    reset();
+
+    $('#reset').click(reset);
+
+    $('#shuffle').click(shuffleMe);
+
+    $('input').change(function() {
+
+        correct = $(this).data('correct');
+        response = $(this).val();
+
+        if (correct == response) {
+            $(this).removeClass("incorrect").addClass("correct");
+            numcorrect = $('#correct').text();
+            //We multiply by 1 change from type text to number
+            $('#correct').text(numcorrect * 1 + 1);
+            var myRand = Math.random();
+            if(myRand<.1){
+            audiolink = document.getElementById('champsound');
+            audiolink.play();
+            }
+        } else {
+            $(this).removeClass("correct").addClass("incorrect");
+            numerrors = $('#errors').text();
+            $('#errors').text(numerrors * 1 + 1);
+            audiolink = document.getElementById('dohsound')
+            audiolink.play();
+        }
+
+    });
+});
+
+
+function shuffleMe() {
+    var parent = $("#quiz");
+    var divs = parent.children();
+    while (divs.length) {
+        parent.append(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+    }
+};
+</script>
+    <style>
+        .correct {
+    background: #90EE90;
+}
+
+.incorrect {
+    background: #ED9090;
+}
+
+#score {
+    margin-left: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border: 2px solid gray;
+    background: rgb(234, 255, 252);
+}
+
+.score {
+    margin-right: 7px;
+}
+</style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div id="score">
+                <strong>Correct:</strong> <span class="score" id="correct">0</span>
+                <strong>Errors:</strong> <span class="score" id="errors">0</span>
+                <strong>Time:</strong> <span class="score" id="elapsedtime">120</span>
+                <span id="timesUp">...</span>
+                <button type="button" id="reset" class="btn btn-primary" autocomplete="off">Reset</button>
+                <button type="button" id="shuffle" class="btn btn-primary">Shuffle</button>
+                <audio id="dohsound" controls>
+                    <source src="http://math.seattleacademy.org/garyanderson/snd/doh.mp3" type="audio/mpeg">
+                </audio>
+                <audio id="champsound" controls>
+                    <source src="snd/champion.mp3" type="audio/mpeg">
+                </audio>
+                <stong>Email:</stong> <input id="username" size="35" class="form-control input-sm" /> <button id="sendme">Submit</button>
+            </div> <!-- End #score -->
+            <h3>Answer the following questions:</h3>
+            <h5>Learn while ordered.  Your goal is to then be able to do these with no errors, shuffled,
+                    in less than 2 minutes.</h5>
+            <h5>If a solution does not exist, enter dne.</h5>
+            <div id="quiz">
+                <div class="row">
+                    <div class="col-md">
+                        <p>\(\sqrt{x^2}\)
+                            <input data-correct="x" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 64^\tfrac{3}{2}\)
+                            <input data-correct="512" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 64^\tfrac{5}{6}\)
+                            <input data-correct="32" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 64^\tfrac{7}{6}\)
+                            <input data-correct="128" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 64^\tfrac{-3}{2}\)
+                            <input data-correct="1/512" type="text" /><span></span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <p>\(64^\tfrac{-2}{3}\)
+                            <input data-correct="1/16" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\((-64)^\tfrac{2}{3}\)
+                            <input data-correct="16" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\(-64^\tfrac{2}{3}\)
+                            <input data-correct="-16" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( (-1000)^\tfrac{-2}{3}\)
+                            <input data-correct="1/100" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( -1000^\tfrac{-2}{3}\)
+                            <input data-correct="-1/100" type="text" /><span></span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <p>\(32^\tfrac{-6}{5}\)
+                            <input data-correct="1/64" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( -32^\tfrac{-6}{5}\)
+                            <input data-correct="-1/64" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 128^\tfrac{2}{7}\)
+                            <input data-correct="4" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 256^\tfrac{3}{4}\)
+                            <input data-correct="64" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\(81^\tfrac{-3}{2}\)
+                            <input data-correct="1/729" type="text" /><span></span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <p>\(243^\tfrac{-4}{5}\)
+                            <input data-correct="1/81" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 343^\tfrac{2}{3}\)
+                            <input data-correct="49" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( 36^\tfrac{3}{2}\)
+                            <input data-correct="216" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( -100^\tfrac{-3}{2}\)
+                            <input data-correct="-1/1000" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( (\frac{9}{49})^\tfrac{-3}{2}\)
+                            <input data-correct="343/27" type="text" /><span></span></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md">
+                        <p>\( (\frac{256}{625})^\tfrac{-3}{4}\)
+                            <input data-correct="125/64" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( (\frac{-729}{64})^\tfrac{-2}{3}\)
+                            <input data-correct="16/81" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\( (\frac{-125}{27})^\tfrac{-4}{3}\)
+                            <input data-correct="-81/625" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\(1728^\tfrac{1}{3}\)
+                            <input data-correct="12" type="text" /><span></span></p>
+                    </div>
+                    <div class="col-md">
+                        <p>\(121^\tfrac{1}{2}\)
+                            <input data-correct="11" type="text" /><span></span></p>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End container -->
+    </body>
+
+    </html>
